@@ -5,13 +5,15 @@
     <title>Post_View</title>
 </head>
 <body>
-{% for item in items %}
+
+
     <form method="POST" enctype="multipart/form-data">
        {% csrf_token %}
        {{ form }}
        <input type="submit" class="btn btn-default" value="Add a picture">
 
-
+Your post are here.
+{% for item in items %}
         <h3>
           Posted by: {{ post.user.username }}
         </h3>
@@ -20,7 +22,9 @@
           {{ post.caption }}
         </span>
  <p> print item </p>
-    {% endfor %}
+{% endfor %}
+
+
      </form>
 </body>
 </html>
