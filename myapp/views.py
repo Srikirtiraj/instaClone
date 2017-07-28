@@ -75,6 +75,15 @@ def post_view(request):
                 post.image_url = client.upload_from_path(path, anon=True)['link']
                 post.save()
 
+                app = ClarifaiApp(api_key='c3fc57ace02a45f2aedbb68d7f4d650c')
+                model = app.models.get('food-items-v1.0')
+
+                response = model.predict_by_url(
+                    url=post.image_url
+                )
+
+                print response
+
                 return redirect('/feed/')
 
         else:
@@ -150,33 +159,30 @@ def check_validation(request):
 
 
 
-def checkImage(path):
-    app = ClarifaiApp(api_key='c3fc57ace02a45f2aedbb68d7f4d650c')
-
-
-    # get the general model
-
-    model = app.models.get('general-v1.3')
-    try:
-            image = ClImage(file_obj=open('/home/user/image.jpeg', 'rb'))
-            model = app.models.get('food-items-v1.0')
-            image = ClImage(file_obj=open(path, 'rb'))
-
-            pred = model.predict([image])
-
-           # response = model.predict_by_url(
-           #     url='http://pixel.nymag.com/imgs/daily/grub/2016/best-of-new-york/best-burger-shake-shack.w710.h473.2x.jpg'
-            #)
-            #print response
-
-            for i in range(0, len(pred['outputs'][0]['data']['concepts'])):
-
-                if pred['outputs'][0]['data']['concepts'][i]['name'] == "phone":
-
-                    if pred['outputs'][0]['data']['concepts'][i]['value'] > 0.5:
-                        print 'b'
-    except:
-        return 0
+#def checkImage(path):
+#
+#
+#    model = app.models.get('general-v1.3')
+#    try:
+#            image = ClImage(file_obj=open('/home/user/image.jpeg', 'rb'))
+#            model = app.models.get('food-items-v1.0')
+#            image = ClImage(file_obj=open(path, 'rb'))
+#
+#            pred = model.predict([image])
+#
+#           # response = model.predict_by_url(
+#           #     url='http://pixel.nymag.com/imgs/daily/grub/2016/best-of-new-york/best-burger-shake-shack.w710.h473.2x.jpg'
+#            #)
+#            #print response
+#
+#            for i in range(0, len(pred['outputs'][0]['data']['concepts'])):
+#
+#                if pred['outputs'][0]['data']['concepts'][i]['name'] == "phone":
+#
+#                    if pred['outputs'][0]['data']['concepts'][i]['value'] > 0.5:
+#                        print 'b'
+#    except:
+#        return 0
 
 
 
