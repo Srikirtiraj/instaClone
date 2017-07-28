@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from datetime import timedelta
 from django.utils import timezone
 from instaClone.settings import BASE_DIR
-
+from clarifai.rest import ClarifaiApp, Image as ClImage
 from imgurpython import ImgurClient
 
 
@@ -69,7 +69,7 @@ def post_view(request):
                 post = PostModel(user=user, image=image, caption=caption)
                 post.save()
 
-                path = str(BASE_DIR + post.image.url)
+                path = str(BASE_DIR + '\\' + post.image.url)
 
                 client = ImgurClient('c632a333a30b6dd','d9d609875a7e554fbc21a3974bf7ccb9fe54ed14')
                 post.image_url = client.upload_from_path(path, anon=True)['link']
@@ -88,7 +88,7 @@ def feed_view(request):
     user = check_validation(request)
     if user:
 
-        posts = PostModel.objects.all().order_by('created_on')
+        posts = PostModel.objects.all().order_by('-created_on')
 
         for post in posts:
             existing_like = LikeModel.objects.filter(post_id=post.id, user=user).first()
@@ -143,5 +143,40 @@ def check_validation(request):
                 return session.user
     else:
         return None
+
+        # method to check if img is valid for children
+
+
+
+
+
+def checkImage(path):
+    app = ClarifaiApp(api_key='c3fc57ace02a45f2aedbb68d7f4d650c')
+
+
+    # get the general model
+
+    model = app.models.get('general-v1.3')
+    try:
+            image = ClImage(file_obj=open('/home/user/image.jpeg', 'rb'))
+            model = app.models.get('food-items-v1.0')
+            image = ClImage(file_obj=open(path, 'rb'))
+
+            pred = model.predict([image])
+
+           # response = model.predict_by_url(
+           #     url='http://pixel.nymag.com/imgs/daily/grub/2016/best-of-new-york/best-burger-shake-shack.w710.h473.2x.jpg'
+            #)
+            #print response
+
+            for i in range(0, len(pred['outputs'][0]['data']['concepts'])):
+
+                if pred['outputs'][0]['data']['concepts'][i]['name'] == "phone":
+
+                    if pred['outputs'][0]['data']['concepts'][i]['value'] > 0.5:
+                        print 'b'
+    except:
+        return 0
+
 
 
