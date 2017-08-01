@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>LogInForm</title>
+    <style>
+    body{
+background-color:darksalmon;
+
+    }
+</style>
 </head>
 <body>
 <form method="post">
     {% csrf_token %}
+    <div class="main">
+            <h1>Instagram Clone</h1>
+            <h3>Log In Form</h3>
+    </div>
       <div>
           <label for="username">Username: </label>
           <input id="username" type="text" name="username" value={{ username }}>
