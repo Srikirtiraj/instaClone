@@ -1,3 +1,5 @@
+#  Imports
+
 from django.shortcuts import render, redirect
 from forms import SignUpForm, LoginForm, PostForm, LikeForm, CommentForm
 from models import UserModel, SessionToken, PostModel, LikeModel, CommentModel
@@ -10,6 +12,8 @@ from imgurpython import ImgurClient
 
 
 # Create your views here.
+
+# sign-up view
 
 def signup_view(request):
     if request.method == "POST":
@@ -29,6 +33,7 @@ def signup_view(request):
 
     return render(request, 'index.html', {'form': form})
 
+# log-in view
 
 def login_view(request):
     response_data = {}
@@ -56,6 +61,7 @@ def login_view(request):
     response_data['form'] = form
     return render(request, 'login.html', response_data)
 
+# post-view
 
 def post_view(request):
     user = check_validation(request)
@@ -92,6 +98,8 @@ def post_view(request):
     else:
         return redirect('/login/')
 
+#  feed view
+
 
 def feed_view(request):
     user = check_validation(request)
@@ -109,6 +117,7 @@ def feed_view(request):
 
         return redirect('/login/')
 
+# like-view
 
 def like_view(request):
     user = check_validation(request)
@@ -125,6 +134,7 @@ def like_view(request):
     else:
         return redirect('/login/')
 
+# comment-view
 
 def comment_view(request):
     user = check_validation(request)
@@ -143,6 +153,7 @@ def comment_view(request):
 
 
 # For validating the session
+
 def check_validation(request):
     if request.COOKIES.get('session_token'):
         session = SessionToken.objects.filter(session_token=request.COOKIES.get('session_token')).first()

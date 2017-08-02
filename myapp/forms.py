@@ -1,7 +1,7 @@
 from django import forms
 from models import UserModel, PostModel, LikeModel, CommentModel
 
-
+# forms
 class SignUpForm(forms.ModelForm):
     class Meta:
         model = UserModel

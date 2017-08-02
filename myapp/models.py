@@ -2,7 +2,7 @@ from django.db import models
 
 import uuid
 
-# Create your models here.
+# Creating models.
 
 
 class UserModel(models.Model):
@@ -47,10 +47,9 @@ class LikeModel(models.Model):
 	created_on = models.DateTimeField(auto_now_add=True)
 	updated_on = models.DateTimeField(auto_now=True)
 
-
 class CommentModel(models.Model):
-	user = models.ForeignKey(UserModel)
-	post = models.ForeignKey(PostModel)
-	comment_text = models.CharField(max_length=555)
-	created_on = models.DateTimeField(auto_now_add=True)
-	updated_on = models.DateTimeField(auto_now=True)
+		user = models.ForeignKey(UserModel)
+		post = models.ForeignKey(PostModel)
+		comment_text = models.CharField(max_length=555)
+		created_on = models.DateTimeField(auto_now_add=True)
+		updated_on = models.DateTimeField(auto_now=True)
